@@ -6,8 +6,8 @@ branch = ENV.fetch('SOLIDUS_BRANCH', 'master')
 gem 'solidus', github: 'solidusio/solidus', branch: branch
 
 gem 'ffaker'
-gem 'sqlite3'
-gem 'pg'
 gem 'mysql2'
+gem 'pg'
+gem 'sqlite3'
 
 gemspec
