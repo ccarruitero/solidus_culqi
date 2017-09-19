@@ -5,9 +5,9 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}.git" }
 branch = ENV.fetch('SOLIDUS_BRANCH', 'master')
 gem 'solidus', github: 'solidusio/solidus', branch: branch
 
-gemspec
+gem 'ffaker'
+gem 'sqlite3'
+gem 'pg'
+gem 'mysql2'
 
-group :test do
-  gem 'ffaker'
-  gem 'sqlite3'
-end
+gemspec
