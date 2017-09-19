@@ -1,5 +1,7 @@
 Solidus Culqi
 =============
+[![Gem Version][rubygems-image]][rubygems-url]
+[![Build Status][travis-image]][travis-url]
 
 Add [Culqi](https://www.culqi.com/) support for [solidus](https://solidus.io/) e-commerce.
 
@@ -28,3 +30,8 @@ First bundle your dependencies, then run `rake`. `rake` will default to building
 bundle
 bundle exec rake
 ```
+
+[rubygems-image]: https://badge.fury.io/rb/solidus_culqi.svg
+[rubygems-url]: https://badge.fury.io/rb/solidus_culqi
+[travis-image]: https://travis-ci.org/ccarruitero/solidus_culqi.svg?branch=master
+[travis-url]: https://travis-ci.org/ccarruitero/solidus_culqi
