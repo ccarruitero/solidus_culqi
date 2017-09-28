@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe "Culqi checkout", type: :feature do
+RSpec.describe "Culqi checkout", :vcr, type: :feature do
   let(:zone) { create(:zone) }
   let(:country) { create(:country) }
   let(:product) { create(:product) }
@@ -11,7 +11,7 @@ RSpec.describe "Culqi checkout", type: :feature do
     create(:store)
     create(:free_shipping_method)
     setup_culqi_gateway
-    checkout_until_payment
+    checkout_until_payment(product)
 
     fill_in "Card Number", with: "4111 1111 1111 1111"
     page.execute_script("$('.cardNumber').trigger('change')")

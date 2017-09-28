@@ -18,6 +18,8 @@ require File.expand_path('../dummy/config/environment.rb', __FILE__)
 require 'rspec/rails'
 require 'database_cleaner'
 require 'ffaker'
+require 'vcr'
+require 'webmock'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'pry'
@@ -90,4 +92,11 @@ RSpec.configure do |config|
 
   config.fail_fast = ENV['FAIL_FAST'] || false
   config.order = 'random'
+end
+
+VCR.configure do |c|
+  c.cassette_library_dir = "spec/cassettes"
+  c.hook_into :webmock
+  c.ignore_localhost = true
+  c.configure_rspec_metadata!
 end

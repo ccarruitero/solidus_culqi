@@ -9,7 +9,7 @@ module CulqiHelper
     )
   end
 
-  def checkout_until_payment
+  def checkout_until_payment(product)
     visit spree.product_path(product)
     click_button "Add To Cart"
 

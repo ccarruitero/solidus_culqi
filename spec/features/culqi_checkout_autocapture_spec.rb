@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe "Culqi checkout autocapture", type: :feature do
+RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature do
   let(:zone) { create(:zone) }
   let(:country) { create(:country) }
   let(:product) { create(:product) }
@@ -11,7 +11,7 @@ RSpec.describe "Culqi checkout autocapture", type: :feature do
     create(:free_shipping_method)
     Spree::Config.set(auto_capture: true)
     setup_culqi_gateway
-    checkout_until_payment
+    checkout_until_payment(product)
   end
 
   context "with valid credit card" do
