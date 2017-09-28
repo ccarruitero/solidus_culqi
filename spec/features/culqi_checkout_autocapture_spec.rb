@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature do
+RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature, js: true do
   let(:zone) { create(:zone) }
   let(:country) { create(:country) }
   let(:product) { create(:product) }
@@ -27,13 +27,13 @@ RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature do
       click_button "Save and Continue"
     end
 
-    it "can process a valid payment", js: true do
+    it "can process a valid payment" do
       expect(page.current_url).to include("/checkout/confirm")
       click_button "Place Order"
       expect(page).to have_content("Your order has been processed successfully")
     end
 
-    it "refunds a payment", js: true do
+    it "refunds a payment" do
       reason = FactoryGirl.create(:refund_reason)
 
       click_button "Place Order"
@@ -48,7 +48,7 @@ RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature do
   end
 
   context "when missing credit card number" do
-    it "shows an error", js: true do
+    it "shows an error" do
       fill_in "Expiration", with: "01 / #{Time.now.year + 1}"
       fill_in "Card Code", with: "123"
       click_button "Save and Continue"
@@ -57,7 +57,7 @@ RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature do
   end
 
   context "when missing expiration date" do
-    it "shows an error", js: true do
+    it "shows an error" do
       fill_in "Card Number", with: "4242 4242 4242 4242"
       fill_in "Card Code", with: "123"
       click_button "Save and Continue"
@@ -66,8 +66,8 @@ RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature do
   end
 
   context "with an invalid credit card number" do
-    it "shows an error", js: true do
-      fill_in "Card Number", with: "1111 1111 1111"
+    it "shows an error" do
+      fill_in "Card Number", with: "1111 1111 1111", visible: false
       fill_in "Expiration", with: "02 / #{Time.now.year + 1}"
       fill_in "Card Code", with: "123"
       click_button "Save and Continue"

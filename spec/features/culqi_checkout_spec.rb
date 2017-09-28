@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe "Culqi checkout", :vcr, type: :feature do
+RSpec.describe "Culqi checkout", :vcr, type: :feature, js: true do
   let(:zone) { create(:zone) }
   let(:country) { create(:country) }
   let(:product) { create(:product) }
@@ -13,7 +13,7 @@ RSpec.describe "Culqi checkout", :vcr, type: :feature do
     setup_culqi_gateway
     checkout_until_payment(product)
 
-    fill_in "Card Number", with: "4111 1111 1111 1111"
+    fill_in "Card Number", with: "4111 1111 1111 1111", visible: false
     page.execute_script("$('.cardNumber').trigger('change')")
     fill_in "Card Code", with: "123"
     fill_in "Expiration", with: "09 / 20"
@@ -29,18 +29,18 @@ RSpec.describe "Culqi checkout", :vcr, type: :feature do
       click_button "Place Order"
     end
 
-    it "process order", js: true do
+    it "process order" do
       expect(page).to have_content("Your order has been processed successfully")
     end
 
-    it "capture payment", js: true do
+    it "capture payment" do
       visit spree.admin_order_payments_path(Spree::Order.last)
       sleep(3)
       click_icon(:capture)
       expect(page).to have_content("Payment Updated")
     end
 
-    it "voids a payment", js: true do
+    it "voids a payment" do
       visit spree.admin_order_payments_path(Spree::Order.last)
       sleep(3)
       click_icon(:void)
