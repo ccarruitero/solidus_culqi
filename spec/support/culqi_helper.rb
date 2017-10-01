@@ -13,11 +13,12 @@ module CulqiHelper
     visit spree.product_path(product)
     click_button "Add To Cart"
 
-    # expect(page).to have_current_path("/cart")
+    expect(page).to have_current_path("/cart")
     click_button "Checkout"
 
     # Address
-    # expect(page).to have_current_path("/checkout/address")
+    find('#order_email')
+    expect(page).to have_current_path("/checkout/address")
     fill_in "Customer E-Mail", with: "han@example.com"
 
     country = Spree::Country.first
@@ -34,10 +35,10 @@ module CulqiHelper
     click_on "Save and Continue"
 
     # Delivery
-    # expect(page).to have_current_path("/checkout/delivery")
+    expect(page).to have_current_path("/checkout/delivery")
     # expect(page).to have_content("UPS Ground")
     click_on "Save and Continue"
 
-    # expect(page).to have_current_path("/checkout/payment")
+    expect(page).to have_current_path("/checkout/payment")
   end
 end
