@@ -1,20 +1,14 @@
 module Solidus
-  class Gateway::CulqiGateway < ::Spree::Gateway
+  class Gateway::CulqiGateway < SolidusCulqi::Gateway.parent_class
+    extend SolidusCulqi::Gateway
+
     preference :public_key, :string
     preference :secret_key, :string
 
+    partial_method 'culqi'
+
     def default_currency
       "PEN"
-    end
-
-    if SolidusSupport.solidus_gem_version < Gem::Version.new('2.3.x')
-      def method_type
-        'culqi'
-      end
-    else
-      def partial_name
-        'culqi'
-      end
     end
 
     def provider_class
