@@ -1,5 +1,3 @@
-require 'solidus_culqi/support'
-
 module SolidusCulqi
   module Gateway
     def self.parent_class

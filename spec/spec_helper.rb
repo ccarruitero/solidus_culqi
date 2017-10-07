@@ -92,6 +92,12 @@ RSpec.configure do |config|
 
   config.fail_fast = ENV['FAIL_FAST'] || false
   config.order = 'random'
+
+  if SolidusCulqi::Support.solidus_earlier('2.3.x')
+    config.filter_run_excluding new_gateway: true
+  else
+    config.filter_run_excluding old_gateway: true
+  end
 end
 
 VCR.configure do |c|
