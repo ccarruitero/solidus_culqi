@@ -6,13 +6,10 @@ module Solidus
     preference :secret_key, :string
 
     partial_method 'culqi'
+    provider_method self.class
 
     def default_currency
       "PEN"
-    end
-
-    def provider_class
-      self.class
     end
 
     def authorize(amount, creditcard, gateway_options)

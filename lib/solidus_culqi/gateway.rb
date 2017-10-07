@@ -11,10 +11,20 @@ module SolidusCulqi
     end
 
     def partial_method(partial_name)
+      common_method('method_type', 'partial_name', partial_name)
+    end
+
+    def provider_method(provider_class)
+      common_method('provider_class', 'gateway_class', provider_class)
+    end
+
+    private
+
+    def common_method(old_method, new_method, method_value)
       if SolidusCulqi::Support.solidus_earlier('2.3.x')
-        define_method('method_type') { partial_name }
+        define_method(old_method) { method_value }
       else
-        define_method('partial_name') { partial_name }
+        define_method(new_method) { method_value }
       end
     end
   end
