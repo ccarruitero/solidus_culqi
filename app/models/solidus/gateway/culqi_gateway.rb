@@ -45,6 +45,20 @@ module Solidus
       credit(amount, creditcard, gateway_options)
     end
 
+    def payment_profiles_supported?
+      true
+    end
+
+    def create_profile(payment)
+      return unless payment.source.gateway_customer_profile_id.nil?
+      customer = generate_customer(payment)
+      card_token = generate_card(customer, payment.gateway_payment_profile_id)
+      payment.source.update_attributes({
+        gateway_customer_profile_id: customer,
+        gateway_payment_profile_id: card_token
+      })
+    end
+
     private
 
     def init_culqi
@@ -75,6 +89,28 @@ module Solidus
         res,
         authorization: res["id"]
       )
+    end
+
+    def generate_customer(payment)
+      address = payment.order.bill_address
+      customer = Culqi::Customer.create(
+        address: address.address1,
+        address_city: address.state.name,
+        country_code: address.country.iso_name,
+        email: pament.order.email,
+        first_name: address.first_name,
+        last_name: address.last_name,
+        phone_number: address.phone
+      )
+      JSON.parse(customer)["id"]
+    end
+
+    def generate_card(customer, token)
+      card = Culqi::Card.create(
+        customer_id: customer,
+        token_id: token
+      )
+      JSON.parse(card)["id"]
     end
   end
 end
