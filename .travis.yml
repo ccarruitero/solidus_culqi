@@ -2,6 +2,8 @@ sudo: false
 cache: bundler
 language: ruby
 bundler_args: --quiet
+before_install:
+  - gem install bundler --pre
 script:
   - bundle exec rake
 rvm:
