@@ -28,21 +28,21 @@ module Solidus
       parse_response(charge)
     end
 
-    def credit(amount, creditcard, _gateway_options)
+    def credit(amount, _creditcard, response_code, _gateway_options)
       init_culqi
       # Culqi only accepts 'duplicado','fraudulento' o 'solicitud_comprador'
       # like reason's value
       refund = Culqi::Refund.create(
         amount: amount,
-        charge_id: creditcard,
+        charge_id: response_code,
         reason: "solicitud_comprador"
       )
       parse_response(refund)
     end
 
-    def void(creditcard, gateway_options)
+    def void(response_code, creditcard, gateway_options)
       amount = gateway_options[:subtotal].to_i
-      credit(amount, creditcard, gateway_options)
+      credit(amount, creditcard, response_code, gateway_options)
     end
 
     def payment_profiles_supported?
@@ -51,12 +51,16 @@ module Solidus
 
     def create_profile(payment)
       return unless payment.source.gateway_customer_profile_id.nil?
-      customer = generate_customer(payment)
-      card_token = generate_card(customer, payment.gateway_payment_profile_id)
-      payment.source.update_attributes({
-        gateway_customer_profile_id: customer,
-        gateway_payment_profile_id: card_token
-      })
+      init_culqi
+      customer = get_customer(payment)
+      token = payment.source.gateway_payment_profile_id
+      card_token = generate_card(customer, token)
+      unless customer.nil? || card_token.nil?
+        payment.source.update({
+          gateway_customer_profile_id: customer,
+          gateway_payment_profile_id: card_token
+        })
+      end
     end
 
     private
@@ -91,18 +95,31 @@ module Solidus
       )
     end
 
-    def generate_customer(payment)
+    def find_customer(email)
+      res = Culqi::Customer.list
+      customers = JSON.parse(res)["data"]
+      customers.select { |customer| customer["email"] == email }.first
+    end
+
+    def get_customer(payment)
       address = payment.order.bill_address
-      customer = Culqi::Customer.create(
+      email = payment.order.email
+      customer = find_customer(email)
+      customer = generate_customer(address, email) if customer.nil?
+      customer["id"]
+    end
+
+    def generate_customer(address, email)
+      culqi_customer = Culqi::Customer.create(
         address: address.address1,
         address_city: address.state.name,
-        country_code: address.country.iso_name,
-        email: pament.order.email,
+        country_code: address.country.iso,
+        email: email,
         first_name: address.first_name,
         last_name: address.last_name,
-        phone_number: address.phone
+        phone_number: address.phone.tr("/() -/", "")
       )
-      JSON.parse(customer)["id"]
+      JSON.parse(culqi_customer)
     end
 
     def generate_card(customer, token)

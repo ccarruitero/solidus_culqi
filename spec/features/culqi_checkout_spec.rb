@@ -31,6 +31,8 @@ RSpec.describe "Culqi checkout", :vcr, type: :feature, js: true do
 
     it "process order" do
       expect(page).to have_content("Your order has been processed successfully")
+      payment = Spree::Order.last.payments.last
+      expect(payment.source.gateway_customer_profile_id).not_to be_nil
     end
 
     it "capture payment" do
