@@ -9,7 +9,7 @@ module CulqiHelper
     )
   end
 
-  def checkout_until_payment(product)
+  def checkout_until_payment(product, user = nil)
     visit spree.product_path(product)
     click_button "Add To Cart"
 
@@ -17,9 +17,16 @@ module CulqiHelper
     click_button "Checkout"
 
     # Address
-    find('#order_email')
-    expect(page).to have_current_path("/checkout/address")
-    fill_in "Customer E-Mail", with: "han@example.com"
+    if user
+      expect(page).to have_current_path("/checkout/address")
+    else
+      within("#guest_checkout") do
+        find('#order_email')
+        fill_in "Email", with: "han@example.com"
+        click_button "Continue"
+      end
+      expect(page).to have_current_path("/checkout")
+    end
 
     country = Spree::Country.first
     within("#billing") do
