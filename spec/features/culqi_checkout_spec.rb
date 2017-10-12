@@ -81,7 +81,12 @@ RSpec.describe "Culqi checkout", :vcr, type: :feature, js: true do
       expect(page).to have_content("Your order has been processed successfully")
 
       checkout_until_payment(product, user)
-      source = user.wallet.wallet_payment_sources.first.payment_source
+      if SolidusCulqi::Support.solidus_earlier('2.2.x')
+        source = user.payment_sources.first
+      else
+        source = user.wallet.wallet_payment_sources.first.payment_source
+      end
+
       expect(page).to have_content(source.name)
       expect(page).to have_content(source.display_number)
     end
