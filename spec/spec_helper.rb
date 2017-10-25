@@ -46,7 +46,7 @@ require 'spree/testing_support/preferences'
 require 'solidus_culqi/factories'
 
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include CulqiHelper
   config.include Spree::TestingSupport::UrlHelpers
   config.include Spree::TestingSupport::Preferences

@@ -34,7 +34,7 @@ RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature, js: true do
     end
 
     it "refunds a payment" do
-      reason = FactoryGirl.create(:refund_reason)
+      reason = FactoryBot.create(:refund_reason)
 
       click_button "Place Order"
       visit spree.admin_order_payments_path(Spree::Order.last)
