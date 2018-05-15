@@ -10,6 +10,7 @@ gem 'solidus', github: 'solidusio/solidus', branch: branch
 gem 'ffaker'
 gem 'mysql2'
 gem 'pg'
+gem 'puma'
 gem 'solidus_auth_devise'
 gem 'sqlite3'
 
