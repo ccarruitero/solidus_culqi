@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SolidusCulqi
   module Gateway
     def self.parent_class

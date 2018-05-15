@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Solidus::Gateway::CulqiGateway, type: :model do

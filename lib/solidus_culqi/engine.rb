@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SolidusCulqi
   class Engine < Rails::Engine
     engine_name 'solidus_culqi'

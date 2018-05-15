@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SolidusCulqi
   module Support
     def self.solidus_earlier(version)

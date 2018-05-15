@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Solidus
   class Gateway::CulqiGateway < SolidusCulqi::Gateway.parent_class
     extend SolidusCulqi::Gateway
