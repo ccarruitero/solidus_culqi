@@ -9,8 +9,8 @@ gem 'solidus', github: 'solidusio/solidus', branch: branch
 
 gem 'deface'
 gem 'ffaker'
-gem 'mysql2'
-gem 'pg'
+gem 'mysql2', '0.4.10'
+gem 'pg', '~> 0.21'
 gem 'puma'
 gem 'solidus_auth_devise'
 gem 'sqlite3'
