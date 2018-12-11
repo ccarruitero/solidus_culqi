@@ -127,7 +127,8 @@ module Solidus
     def generate_card(customer, token)
       card = Culqi::Card.create(
         customer_id: customer,
-        token_id: token
+        token_id: token,
+        validate: false
       )
       JSON.parse(card)["id"]
     end
