@@ -23,13 +23,20 @@ require 'ffaker'
 require 'vcr'
 require 'webmock'
 require 'capybara/rspec'
-require 'capybara/poltergeist'
+require 'selenium-webdriver'
 require 'pry'
 
-Capybara.register_driver(:poltergeist) do |app|
-  Capybara::Poltergeist::Driver.new app, timeout: 90
+Capybara.register_driver :geckodriver do |app|
+  ::Selenium::WebDriver::Firefox.driver_path = ENV['DRIVER_PATH']
+  options = ::Selenium::WebDriver::Firefox::Options.new
+  options.args << '--headless'
+
+  Capybara::Selenium::Driver.new(app,
+                                 browser: :firefox,
+                                 options: options)
 end
-Capybara.javascript_driver = :poltergeist
+
+Capybara.javascript_driver = :geckodriver
 Capybara.default_max_wait_time = 30
 
 # Requires supporting ruby files with custom matchers and macros, etc,
