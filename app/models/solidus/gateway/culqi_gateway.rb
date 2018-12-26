@@ -53,6 +53,7 @@ module Solidus
 
     def create_profile(payment)
       return unless payment.source.gateway_customer_profile_id.nil?
+
       init_culqi
       customer = get_customer(payment)
       token = payment.source.gateway_payment_profile_id
