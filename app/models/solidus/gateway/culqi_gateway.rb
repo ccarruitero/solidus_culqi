@@ -91,8 +91,8 @@ module Solidus
     def parse_response(response)
       res = JSON.parse(response)
       ActiveMerchant::Billing::Response.new(
-        res[:object] != "error",
-        res[:merchant_message],
+        res["object"] != "error",
+        res["merchant_message"],
         res,
         authorization: res["id"]
       )
