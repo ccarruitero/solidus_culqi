@@ -1,0 +1,28 @@
+require 'json'
+require 'net/http'
+require 'fileutils'
+require 'open-uri'
+require 'archive/zip'
+
+path = 'https://api.github.com/repos/mozilla/geckodriver/releases/latest'
+
+res = Net::HTTP.get_response(URI(path))
+json = JSON.parse(res.body)
+download_url = json['url']
+
+filename = 'geckodriver'
+
+Dir.chdir platform_install_dir do
+  FileUtils.rm_f filename
+  File.open(filename, "wb") do |saved_file|
+    URI.parse(download_url).open("rb") do |read_file|
+      saved_file.write(read_file.read)
+    end
+  end
+
+  raise "Could not download #{download_url}" unless File.exists? filename
+  Archive::Zip.extract(filename, '.', :overwrite => :all)
+end
+raise "Could not unzip #{filename} to get #{binary_path}" unless File.exists? binary_path
+FileUtils.chmod "ugo+rx", binary_path
+File.open(version_path, 'w') { |file| file.write(download_version) }
