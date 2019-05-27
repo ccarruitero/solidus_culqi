@@ -59,10 +59,10 @@ module Solidus
       token = payment.source.gateway_payment_profile_id
       card_token = generate_card(customer, token)
       unless customer.nil? || card_token.nil?
-        payment.source.update({
+        payment.source.update(
           gateway_customer_profile_id: customer,
           gateway_payment_profile_id: card_token
-        })
+        )
       end
     end
 
