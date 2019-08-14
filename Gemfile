@@ -16,3 +16,5 @@ gem 'solidus_auth_devise'
 gem 'sqlite3'
 
 gemspec
+
+gem 'culqi-ruby', github: 'culqi/culqi-ruby'
