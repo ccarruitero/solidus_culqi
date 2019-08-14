@@ -25,18 +25,9 @@ require 'webmock'
 require 'capybara/rspec'
 require 'selenium-webdriver'
 require 'pry'
+require 'webdrivers/chromedriver'
 
-Capybara.register_driver :geckodriver do |app|
-  ::Selenium::WebDriver::Firefox.driver_path = ENV['DRIVER_PATH']
-  options = ::Selenium::WebDriver::Firefox::Options.new
-  options.args << '--headless'
-
-  Capybara::Selenium::Driver.new(app,
-                                 browser: :firefox,
-                                 options: options)
-end
-
-Capybara.javascript_driver = :geckodriver
+Capybara.javascript_driver = :selenium_chrome_headless
 Capybara.default_max_wait_time = 30
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -97,6 +88,20 @@ RSpec.configure do |config|
   # After each spec clean the database.
   config.after :each do
     DatabaseCleaner.clean
+  end
+
+  config.after(:each, js: true) do
+    errors = page.driver.browser.manage.logs.get(:browser)
+    if errors.present?
+      aggregate_failures 'javascript errors' do
+        errors.each do |error|
+          expect(error.level).not_to eq('SEVERE'), error.message
+          next unless error.level == 'WARNING'
+          STDERR.puts 'WARN: javascript warning'
+          STDERR.puts error.message
+        end
+      end
+    end
   end
 
   config.fail_fast = ENV['FAIL_FAST'] || false
