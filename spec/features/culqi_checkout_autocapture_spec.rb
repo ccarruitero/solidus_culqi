@@ -20,13 +20,7 @@ RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature, js: true do
     stub_authorization!
 
     before do
-      fill_in "Card Number", with: "4111 1111 1111 1111"
-      page.execute_script("$('.cardNumber').trigger('change')")
-      fill_in "Card Code", with: "123"
-      fill_in "Expiration", with: "09 / 20"
-      click_button "Save and Continue"
-      sleep(5) # Wait for API to return + form to submit
-      click_button "Save and Continue"
+      fill_card("4111 1111 1111 1111")
     end
 
     it "can process a valid payment" do
@@ -73,6 +67,20 @@ RSpec.describe "Culqi checkout autocapture", :vcr, type: :feature, js: true do
       fill_in "Expiration", with: "02 / #{Time.now.year + 1}"
       fill_in "Card Code", with: "123"
       click_button "Save and Continue"
+      expect(page).to have_content("El numero de tarjeta de crédito o débito brindado no es válido.")
+    end
+  end
+
+  context "with stolen card" do
+    it "shows an error" do
+      fill_card "4000 0200 0000 0000", "2019"
+      expect(page).to have_content("El numero de tarjeta de crédito o débito brindado no es válido.")
+    end
+  end
+
+  context "with insufficient funds" do
+    it "shows an error" do
+      fill_card("4000 0400 0000 0008")
       expect(page).to have_content("El numero de tarjeta de crédito o débito brindado no es válido.")
     end
   end

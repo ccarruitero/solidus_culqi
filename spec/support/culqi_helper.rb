@@ -50,4 +50,15 @@ module CulqiHelper
 
     expect(page).to have_current_path("/checkout/payment")
   end
+
+  def fill_card(number, year = Time.now.year + 1)
+    page.execute_script("$('#card_number').val('#{number}')")
+    page.execute_script("$('#card_number').trigger('change')")
+    fill_in "Card Code", with: "123"
+    page.execute_script("$('#card_expiry').val('09 / #{year}')")
+    page.execute_script("$('#card_expiry').trigger('change')")
+    click_button "Save and Continue"
+    sleep(5) # Wait for API to return + form to submit
+    click_button "Save and Continue"
+  end
 end
