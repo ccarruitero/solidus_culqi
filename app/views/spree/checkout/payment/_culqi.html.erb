@@ -6,7 +6,7 @@
   <%= select_tag "[order][installments]", [], class: "culqiInstallments" %>
 </p>
 
-<script type="text/javascript" src="https://checkout.culqi.com/v2"></script>
+<script type="text/javascript" src="https://checkout.culqi.com/v2.js"></script>
 <script type="text/javascript">
   Culqi.publicKey = "<%= payment_method.preferred_public_key %>";
   Culqi.useClasses = true;
@@ -33,7 +33,7 @@
   }
 
   function allowedInstallments(token) {
-    var installments = token['iin'] && token['inn']['installments_allowed'];
+    var installments = token['inn'] ? token['inn']['installments_allowed'] : null;
     var submitBtn = $('#checkout_form_payment [data-hook=buttons]');
     if (installments && installments.length > 0) {
       (installments.indexOf(0) !== -1)  ? null : installments.unshift(0);
@@ -51,6 +51,11 @@
 
   function culqi() {
     if (Culqi.token) {
+      if (Culqi.token.object === 'error') {
+        $('#culqiError').html(Culqi.token.merchant_message);
+        return $('#culqiError').show();
+      }
+
       Spree.culqiPaymentMethod.append("<input type='hidden' name='<%= param_prefix %>[gateway_payment_profile_id]' value='" + Culqi.token['id'] + "'/>");
       allowedInstallments(Culqi.token)
     } else if (Culqi.error) {
@@ -64,6 +69,7 @@
   $(document).ready(function() {
     Spree.culqiPaymentMethod.prepend("<div id='culqiError' class='errorExplanation' style='display:none'></div>");
     $('#checkout_form_payment [data-hook=buttons]').click(function(e) {
+      e.preventDefault();
       if (Spree.culqiPaymentMethod.is(':visible')) {
         e.preventDefault();
         var expiration = $('.cardExpiry:visible').payment('cardExpiryVal');
