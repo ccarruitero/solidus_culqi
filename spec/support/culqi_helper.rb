@@ -6,8 +6,8 @@ module CulqiHelper
   def setup_culqi_gateway
     Solidus::Gateway::CulqiGateway.create!(
       name: "Culqi",
-      preferred_secret_key: "sk_test_SpwICNI4YT0OSLHY",
-      preferred_public_key: "pk_test_CaY0noGVG8ohIj4P"
+      preferred_secret_key: "sk_test_96a3cgezoRsHb3SR",
+      preferred_public_key: "pk_test_Fi1VHNShLrzIKmRi"
     )
   end
 
