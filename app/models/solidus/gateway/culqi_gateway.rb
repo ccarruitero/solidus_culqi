@@ -74,7 +74,7 @@ module Solidus
     end
 
     def commit(amount, creditcard, gateway_options, capture)
-      installments = gateway_options[:installments]
+      installments = gateway_options.try(:installments)
       authorization = creditcard[:gateway_payment_profile_id]
       charge = Culqi::Charge.create(
         amount: amount,

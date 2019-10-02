@@ -10,7 +10,7 @@ module SolidusCulqi
     module InstanceMethods
       def gateway_options
         options = super
-        installments = order.installments
+        installments = order.try(:installments)
         options[:installments] = installments if installments
         options
       end
