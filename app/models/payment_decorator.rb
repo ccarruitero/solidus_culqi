@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-Spree::Payment.include SolidusCulqi::InjectInstallmentsConcern
+module PaymentDecorator
+  Spree::Payment.include SolidusCulqi::InjectInstallmentsConcern
+end
