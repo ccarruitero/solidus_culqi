@@ -79,27 +79,6 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  config.after(:each, js: true) do
-    errors = page.driver.browser.manage.logs.get(:browser)
-    if errors.present?
-      aggregate_failures 'javascript errors' do
-        errors.each do |error|
-          expect(error.level).not_to eq('SEVERE'), error.message
-          next unless error.level == 'WARNING'
-
-          warn 'WARN: javascript warning'
-          warn error.message
-        end
-      end
-    end
-  end
-
   config.fail_fast = ENV['FAIL_FAST'] || false
   config.order = 'random'
-
-  if SolidusCulqi::Support.solidus_earlier('2.3.x')
-    config.filter_run_excluding new_gateway: true
-  else
-    config.filter_run_excluding old_gateway: true
-  end
 end
