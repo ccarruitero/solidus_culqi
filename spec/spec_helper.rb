@@ -20,15 +20,7 @@ require File.expand_path('dummy/config/environment.rb', __dir__)
 require 'rspec/rails'
 require 'database_cleaner'
 require 'ffaker'
-require 'vcr'
-require 'webmock'
-require 'capybara/rspec'
-require 'selenium-webdriver'
 require 'pry'
-require 'webdrivers/chromedriver'
-
-Capybara.javascript_driver = :selenium_chrome_headless
-Capybara.default_max_wait_time = 30
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -47,8 +39,6 @@ require 'solidus_culqi/factories'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
-  config.include CulqiHelper
-  config.include Spree::TestingSupport::UrlHelpers
   config.include Spree::TestingSupport::Preferences
 
   # Infer an example group's spec type from the file location.
@@ -82,7 +72,6 @@ RSpec.configure do |config|
   config.before :each do
     DatabaseCleaner.strategy = RSpec.current_example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
-    reset_spree_preferences
   end
 
   # After each spec clean the database.
@@ -113,12 +102,4 @@ RSpec.configure do |config|
   else
     config.filter_run_excluding old_gateway: true
   end
-end
-
-VCR.configure do |c|
-  c.cassette_library_dir = "spec/cassettes"
-  c.hook_into :webmock
-  c.ignore_localhost = true
-  c.configure_rspec_metadata!
-  c.default_cassette_options = { re_record_interval: 7.days }
 end
