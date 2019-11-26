@@ -1,14 +1,17 @@
 # frozen_string_literal: true
 
 module Solidus
-  class Gateway::CulqiGateway < SolidusCulqi::Gateway.parent_class
-    extend SolidusCulqi::Gateway
-
+  class Gateway::CulqiGateway < Spree::PaymentMethod::CreditCard
     preference :public_key, :string
     preference :secret_key, :string
 
-    partial_method 'culqi'
-    provider_method self.class
+    def partial_name
+      'culqi'
+    end
+
+    def gateway_class
+      self.class
+    end
 
     def default_currency
       "PEN"
