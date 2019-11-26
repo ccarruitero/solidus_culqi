@@ -5,7 +5,7 @@ bundler_args: --quiet
 script:
   - bundle exec rake
 rvm:
-  - 2.4.2
+  - 2.6.5
 env:
   matrix:
     - SOLIDUS_BRANCH=v2.5 DB=postgres
