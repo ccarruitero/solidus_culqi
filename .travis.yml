@@ -6,6 +6,9 @@ script:
   - bundle exec rake
 rvm:
   - 2.6.5
+services:
+  - postgresql
+  - mysql
 env:
   matrix:
     - SOLIDUS_BRANCH=v2.5 DB=postgres
