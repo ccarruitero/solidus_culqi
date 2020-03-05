@@ -6,11 +6,6 @@ AllCops:
     - 'vendor/bundle/**/*'
   TargetRubyVersion: 2.5
 
-# Sometimes I believe this reads better
-# This also causes spacing issues on multi-line fixes
-Style/BracesAroundHashParameters:
-  Enabled: false
-
 # We use class vars and will have to continue doing so for compatability
 Style/ClassVars:
   Enabled: false
@@ -65,6 +60,9 @@ Layout/ClosingParenthesisIndentation:
   Enabled: false
 
 Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
+Layout/LineLength:
   Enabled: false
 
 # From http://relaxed.ruby.style/
@@ -176,6 +174,15 @@ Style/WhileUntilModifier:
   Enabled: false
   StyleGuide: http://relaxed.ruby.style/#stylewhileuntilmodifier
 
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
 Lint/AmbiguousRegexpLiteral:
   Enabled: false
   StyleGuide: http://relaxed.ruby.style/#lintambiguousregexpliteral
@@ -205,9 +212,6 @@ Metrics/ModuleLength:
   Enabled: false
 
 Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/LineLength:
   Enabled: false
 
 Metrics/MethodLength:
