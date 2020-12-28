@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
 
+  s.required_ruby_version = Gem::Requirement.new('~> 2.6')
+
   s.add_dependency 'culqi-ruby'
   s.add_dependency 'solidus_core'
   s.add_dependency 'solidus_support'
