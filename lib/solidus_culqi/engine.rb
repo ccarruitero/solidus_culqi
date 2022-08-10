@@ -2,6 +2,10 @@
 
 module SolidusCulqi
   class Engine < Rails::Engine
+    include SolidusSupport::EngineExtensions
+
+    isolate_namespace ::Spree
+
     engine_name 'solidus_culqi'
 
     # use rspec for tests
